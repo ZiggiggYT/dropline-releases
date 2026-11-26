@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dropline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* VOICE  a product launch film: Space plays the next scene
+   IDEA   the app's own world: two devices joined by a line, one orange dot for whatever is live
+   PICTURE real screenshots in drawn laptop and phone frames; notes, files, screens and alerts travel between them
+   COLOUR  plain white, near-black ink, signal orange for whatever moves
+   TYPE    Geist 600 headlines rising word by word, Geist text, Geist Mono for keys and labels
+   LAYOUT  one screen per scene: slim words column, very large picture; stacked on phones */
+:root{color-scheme:light;--bg:light-dark(#ffffff,#121110);--surface:light-dark(#ffffff,#1c1b19);--ink:light-dark(#111110,#f3f1ec);--ink2:light-dark(#625e58,#aaa59d);--line:light-dark(#e7e3dc,#2d2b28);--accent:#ff4f00;--frame:#151413}
+:root,:root[data-theme]{color-scheme:light}
+*{box-sizing:border-box;min-width:0}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font:17px/1.55 Geist,system-ui,sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased;background:transparent;transition:color .4s}
+img{max-width:100%;display:block}
+a{color:inherit}
+/* background layers */
+#bg{position:fixed;inset:0;z-index:-2;background:var(--page,var(--bg));transition:background .5s;overflow:hidden}
+#bg .grid{position:absolute;inset:-60px;background-image:radial-gradient(color-mix(in srgb,var(--ink) 14%,transparent) 1.2px,transparent 1.3px);background-size:28px 28px;opacity:.45;mask-image:radial-gradient(ellipse at 50% 40%,#000 30%,transparent 75%)}
+#net{position:fixed;inset:0;z-index:-1;pointer-events:none}
+#progress{position:fixed;left:0;top:0;height:3px;width:100%;transform-origin:0 0;transform:scaleX(0);background:var(--accent);z-index:30}
+.wrap{max-width:1360px;margin:0 auto;padding:0 max(4vw,16px)}
+nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--page,var(--bg)) 78%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:12px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;text-decoration:none}
+nav .links{margin-left:auto;display:flex;gap:22px;font-size:15px;color:var(--ink2)}
+nav .links a{text-decoration:none;transition:color .2s}
+nav .links a:hover{color:var(--ink)}
+.btn{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:13px;background:var(--ink);color:var(--page,var(--bg));font-weight:600;font-size:15px;text-decoration:none;transition:transform .18s,box-shadow .18s;border:0;cursor:pointer;font-family:inherit}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px color-mix(in srgb,var(--ink) 25%,transparent)}
+.btn.shine::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);animation:shine 3.2s ease-in-out infinite}
+@keyframes shine{0%,55%{left:-60%}85%,100%{left:130%}}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn:focus-visible,nav a:focus-visible,#hud button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+h1{font-size:clamp(46px,6vw,92px);line-height:1;letter-spacing:-.04em;margin:0;font-weight:660;text-wrap:balance}
+h2{font-size:clamp(34px,3.6vw,56px);line-height:1.02;letter-spacing:-.03em;margin:0 0 16px;font-weight:640;text-wrap:balance}
+.w{display:inline-block;transition:transform .7s cubic-bezier(.2,.9,.25,1),opacity .7s;transition-delay:calc(var(--i)*55ms)}
+.js .rise:not(.in) .w{transform:translateY(.55em) rotate(3deg);opacity:0}
+.lead{font-size:clamp(17px,1.4vw,20px);color:var(--ink2);max-width:32em;margin:20px 0 30px}
+.cap p{color:var(--ink2);margin:0 0 14px;max-width:28em}
+.cap ul{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:10px;font-size:15px}
+.cap li{display:flex;gap:10px;align-items:baseline;transition:transform .6s cubic-bezier(.2,.9,.25,1),opacity .6s;transition-delay:calc(300ms + var(--i)*90ms)}
+.js .cap:not(.in) li{transform:translateX(-18px);opacity:0}
+.cap li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--accent);transform:translateY(-2px);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+.tag{font:500 13px "Geist Mono",monospace;color:var(--ink2)}
+/* hero */
+.hero{padding:clamp(30px,5vw,70px) 0 30px;position:relative}
+.hero .wrap{display:grid;gap:8px}
+.hero .cta{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.hero-box{margin-top:28px}
+@media(min-width:900px){.hero .wrap{grid-template-columns:minmax(0,4fr) minmax(0,7fr);column-gap:clamp(24px,3vw,48px);align-items:center;min-height:calc(100svh - 120px)}.hero .wrap>*{grid-column:1}.hero .wrap>.hero-box{grid-column:2;grid-row:1/span 4;margin:0}}
+/* scenes */
+.scene{position:relative}
+.stage{position:relative;height:100%;display:grid;grid-template-columns:minmax(0,3fr) minmax(0,8fr);gap:clamp(16px,2.6vw,44px);align-items:center;max-width:1360px;margin:0 auto;padding:0 max(4vw,16px)}
+.box{position:relative;width:100%;aspect-ratio:1200/720;max-height:calc(100svh - 110px);perspective:1600px}
+.hero .box{max-height:none}
+.art{position:absolute;left:0;top:0;width:1200px;height:720px;transform-origin:0 0}
+.tilt{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.9,.25,1)}
+/* drawn devices */
+.laptop{position:absolute}
+.laptop .scr{background:var(--frame);border-radius:22px 22px 7px 7px;padding:14px 14px 19px;box-shadow:0 40px 80px -36px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.06)}
+.laptop .scr>div{position:relative;border-radius:9px;overflow:hidden;aspect-ratio:1600/1088;background:#fafaf8}
+.laptop .scr img{width:100%;height:100%;object-fit:cover}
+.laptop .base{height:21px;margin:0 -50px;background:linear-gradient(#e2e1dd,#b5b4af);border-radius:0 0 18px 18px;position:relative;box-shadow:0 20px 30px -18px rgba(0,0,0,.45)}
+.laptop .base::before{content:"";position:absolute;left:50%;top:0;width:140px;height:8px;margin-left:-70px;background:#a7a6a1;border-radius:0 0 9px 9px}
+.phone{position:absolute;background:var(--frame);border-radius:42px;padding:11px;box-shadow:0 40px 60px -26px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,255,255,.07)}
+.phone .in{position:relative;border-radius:32px;overflow:hidden;aspect-ratio:800/1720;background:#fafaf8}
+.phone .in>img{width:100%;height:100%;object-fit:cover}
+.phone .in::after{content:"";position:absolute;top:9px;left:50%;width:11px;height:11px;margin-left:-5px;border-radius:50%;background:#0c0c0b}
+.desk{position:absolute;inset:0;background:radial-gradient(120% 90% at 20% 10%,#f6f0e8,#e7e2da 60%,#d8d4cc)}
+.win{position:absolute;background:#fff;border-radius:8px;box-shadow:0 10px 30px -14px rgba(0,0,0,.35)}
+.win::before{content:"";position:absolute;left:0;right:0;top:0;height:22px;border-bottom:1px solid #eeece8;border-radius:8px 8px 0 0;background:#f7f6f3}
+.taskbar{position:absolute;left:0;right:0;bottom:0;height:30px;background:rgba(255,255,255,.75);border-top:1px solid rgba(0,0,0,.06)}
+.chip{position:absolute;display:flex;align-items:center;gap:10px;padding:13px 20px;border-radius:999px;background:#fff;color:#111110;border:1px solid #e7e3dc;font-weight:600;font-size:23px;white-space:nowrap;box-shadow:0 16px 34px -14px rgba(0,0,0,.45);will-change:transform}
+.chip i{width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.toast{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);background:#111110;color:#fff;padding:8px 14px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.key{position:absolute;min-width:62px;height:62px;padding:0 14px;display:grid;place-items:center;border-radius:13px;background:#fff;color:#111110;font:600 22px "Geist Mono",monospace;border:1px solid #e3dfd8;box-shadow:0 6px 0 #d7d2ca,0 14px 24px -10px rgba(0,0,0,.35)}
+.card{position:absolute;width:160px;border-radius:15px;overflow:hidden;background:#fff;box-shadow:0 18px 34px -14px rgba(0,0,0,.5);will-change:transform}
+.card img{aspect-ratio:3/2;object-fit:cover;width:100%}
+.card .doc{aspect-ratio:3/2;display:grid;place-items:center;background:#f3f1ec;font:600 18px "Geist Mono",monospace;color:#625e58}
+.card b{display:block;height:6px;background:#eee}
+.card b::after{content:"";display:block;height:100%;width:calc(var(--f,0)*100%);background:var(--accent)}
+.stamp{position:absolute;width:56px;height:56px;border-radius:50%;background:#111110;display:grid;place-items:center;box-shadow:0 10px 20px -8px rgba(0,0,0,.5)}
+.note{position:absolute;right:16px;width:310px;background:#fff;color:#111110;border-radius:13px;padding:12px 14px;display:grid;grid-template-columns:36px 1fr;gap:3px 11px;box-shadow:0 16px 34px -12px rgba(0,0,0,.4);font-size:13px;line-height:1.35;will-change:transform}
+.note i{grid-row:span 3;width:36px;height:36px;border-radius:10px}
+.note span{font:500 11px "Geist Mono",monospace;color:#8a867f}
+.note strong{font-size:14px}
+.note em{font-style:normal;color:#5f5c57}
+.badge{position:absolute;min-width:34px;height:34px;padding:0 9px;border-radius:999px;background:var(--accent);color:#fff;font:700 17px Geist,sans-serif;display:grid;place-items:center;box-shadow:0 0 0 5px var(--page,var(--bg))}
+.ring{position:absolute;border:3px solid var(--accent);border-radius:50%;pointer-events:none}
+.pin{display:flex;gap:18px;justify-content:center}
+.pin i{width:24px;height:24px;border-radius:50%;border:3px solid var(--ink2);transition:background .25s,border-color .25s,transform .35s cubic-bezier(.2,1.6,.3,1)}
+.pin i.on{background:var(--ink);border-color:var(--ink);transform:scale(1.15)}
+.cipher{position:absolute;font:600 25px "Geist Mono",monospace;white-space:nowrap;padding:14px 22px;border-radius:16px;background:var(--surface);border:1px solid var(--line);color:var(--ink);box-shadow:0 16px 34px -18px rgba(0,0,0,.3)}
+.cipher .x{color:var(--accent)}
+/* step HUD */
+#hud{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:25;display:flex;align-items:center;gap:12px;padding:8px 10px 8px 14px;border-radius:999px;background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(12px);border:1px solid var(--line);box-shadow:0 16px 40px -18px rgba(0,0,0,.35);font-size:14px}
+#dots{display:flex;gap:6px}
+#dots button{width:9px;height:9px;padding:0;border-radius:99px;border:0;background:var(--line);cursor:pointer;transition:width .35s cubic-bezier(.2,.9,.25,1),background .3s}
+#dots button.on{width:34px;background:linear-gradient(90deg,var(--accent) calc(var(--prog,0)*100%),color-mix(in srgb,var(--accent) 30%,var(--line)) 0)}
+#next{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 6px 0 4px;border:0;background:none;color:var(--ink);font:inherit;cursor:pointer}
+#next kbd{font:500 12px "Geist Mono",monospace;padding:4px 9px;border-radius:7px;border:1px solid var(--line);border-bottom-width:3px;background:var(--surface);animation:nudge 2.4s ease-in-out infinite}
+@keyframes nudge{0%,70%,100%{transform:translateY(0)}80%{transform:translateY(2px)}}
+.cta-band{padding:clamp(80px,10vw,150px) 0 140px;text-align:center;position:relative}
+.cta-band .lead{margin-inline:auto}
+.cta-band .row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.link-anim line{stroke-dasharray:4 10;animation:flow 1s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-14}}
+.link-anim circle:last-of-type{animation:beat 1.6s ease-in-out infinite;transform-origin:98px 30px}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+footer{padding:28px 0 90px;color:var(--ink2);font-size:14px;border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+@media(max-width:860px){.stage{grid-template-columns:1fr;align-content:center;gap:14px}.box{max-height:56svh}nav .links{display:none}.cap ul{display:none}.cap p{font-size:15px}#hud{bottom:14px}}
+@media(prefers-reduced-motion:reduce){.w,.cap li{transition:none}.btn.shine::after,#next kbd,.link-anim line,.link-anim circle{animation:none}}
+</style>
+</head>
+<body>
+<div id="bg"><div class="grid" id="grid"></div></div>
+<canvas id="net" aria-hidden="true"></canvas>
+<div id="progress"></div>
+
+<nav><div class="wrap">
+  <a class="brand" href="#top" aria-label="Dropline home"><svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><line x1="6" y1="10" x2="28" y2="10" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="6" cy="10" r="5.2" fill="currentColor"/><circle cx="28" cy="10" r="5.2" fill="#ff4f00"/></svg>Dropline</a>
+  <div class="links"><a href="#copy">Clipboard</a><a href="#send">Files</a><a href="#mirror">Screen</a><a href="#notify">Notifications</a><a href="#private">Privacy</a></div>
+  <a class="btn" href="#get" style="min-height:38px;padding:0 14px">Download</a>
+</div></nav>
+
+<header class="hero" id="top" data-stop>
+  <div class="wrap">
+    <svg width="120" height="60" viewBox="0 0 120 60" aria-hidden="true"><line id="hl" x1="22" y1="30" x2="98" y2="30" stroke="currentColor" stroke-width="8" stroke-linecap="round" pathLength="1"/><circle id="hd1" cx="22" cy="30" r="17" fill="currentColor"/><circle id="hd2" cx="98" cy="30" r="17" fill="#ff4f00"/></svg>
+    <h1 class="rise">Your phone and computer, as one.</h1>
+    <p class="lead">Copy on one, paste on the other. Send photos, links and files in a second. See your phone’s screen and notifications on your PC. All over your own Wi‑Fi.</p>
+    <div class="cta"><a class="btn shine" href="#get">Get Dropline</a><button class="btn ghost" type="button" id="tour">Take the tour</button><span class="tag">Windows 10/11 · Android 10+</span></div>
+    <div class="box hero-box"><div class="art"><div class="tilt">
+      <div class="laptop" id="heroLap" style="left:10px;top:20px;width:860px"><div class="scr"><div><img src="img/pc-activity.webp" alt="Dropline on a PC: the Activity list with photos, a link and text received from a phone"></div></div><div class="base"></div></div>
+      <svg width="1200" height="720" style="position:absolute;inset:0;overflow:visible" aria-hidden="true"><path id="heroArc" d="M720 290 Q 880 40 1000 210" fill="none" stroke="#ff4f00" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/><g id="heroDots"></g></svg>
+      <div class="phone" id="heroPhone" style="left:910px;top:140px;width:260px"><div class="in"><img src="img/phone.webp" alt="Dropline on an Android phone"></div></div>
+    </div></div></div>
+  </div>
+</header>
+
+<section class="scene" id="copy" data-scene="copy" data-dur="4200" data-steps="3"><div class="stage">
+  <div class="cap"><h2 class="rise">Copy here. Paste there.</h2><p>Anything you copy on your PC is on your phone a moment later. Going the other way takes one tap from Quick Settings.</p><ul><li>Text and links, instantly</li><li>Passwords from password managers are never synced</li></ul></div>
+  <div class="box"><div class="art"><div class="tilt">
+    <div class="laptop" style="left:0;top:50px;width:740px"><div class="scr"><div><img src="img/pc-activity.webp" alt="" loading="lazy"></div></div><div class="base"></div></div>
+    <div class="key" id="kCtrl" style="left:250px;top:600px">Ctrl</div><div class="key" id="kC" style="left:345px;top:600px">C</div>
+    <div class="phone" id="cPhone" style="left:910px;top:60px;width:270px"><div class="in"><img src="img/phone.webp" alt="" loading="lazy"><div class="toast" id="copyToast">Copied from Studio PC</div></div></div>
+    <svg width="1200" height="720" style="position:absolute;inset:0;overflow:visible" aria-hidden="true"><path d="M440 170 Q 780 -70 1040 260" fill="none" stroke="currentColor" stroke-opacity=".18" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/><g id="trail"></g><g id="burst"></g></svg>
+    <div class="chip" id="copyChip"><i></i>Table for 4 at Nori, 8pm</div>
+  </div></div></div>
+</div></section>
+
+<section class="scene" id="send" data-scene="send" data-dur="5200" data-steps="3"><div class="stage">
+  <div class="cap"><h2 class="rise">Send anything, any size.</h2><p>Share a photo, video or file from any app on your phone and it lands in Downloads on your PC. Drag files onto the window to go the other way.</p><ul><li>Straight over Wi‑Fi, never through a cloud</li><li>Progress, cancel, and a check when it’s done</li></ul></div>
+  <div class="box"><div class="art"><div class="tilt">
+    <div class="phone" id="sPhone" style="left:10px;top:70px;width:270px"><div class="in"><img src="img/phone.webp" alt="" loading="lazy"></div></div>
+    <div class="laptop" id="sLap" style="left:400px;top:60px;width:780px"><div class="scr"><div><img src="img/pc-activity.webp" alt="" loading="lazy"></div></div><div class="base"></div></div>
+    <div class="card" id="c0"><img src="img/photo-sunset.webp" alt=""><b></b></div>
+    <div class="card" id="c1"><img src="img/photo-trail.webp" alt=""><b></b></div>
+    <div class="card" id="c2"><div class="doc">PDF</div><b></b></div>
+    <div id="stamps"></div>
+  </div></div></div>
+</div></section>
+
+<section class="scene" id="mirror" data-scene="mirror" data-dur="6200" data-steps="3"><div class="stage">
+  <div class="cap"><h2 class="rise">Your phone, in a corner of your PC.</h2><p>Share your phone’s screen and it floats above everything in a small window. Drag it anywhere, double‑click for fullscreen. Turn the phone and it turns too.</p><ul><li>Works the other way: your PC on your phone</li><li>Pops out into picture‑in‑picture on Android</li></ul></div>
+  <div class="box"><div class="art"><div class="tilt">
+    <div class="laptop" style="left:10px;top:20px;width:900px"><div class="scr"><div><div class="desk" id="mDesk">
+      <div class="win" style="left:7%;top:8%;width:46%;height:52%"></div><div class="win" style="left:30%;top:23%;width:40%;height:46%"></div><div class="taskbar"></div>
+      <div id="mw" style="position:absolute;border-radius:10px;overflow:hidden;box-shadow:0 18px 40px -14px rgba(0,0,0,.6);background:#000">
+        <img id="mwP" src="img/mirror-portrait.webp" alt="Your phone's screen floating in a corner of the PC" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" loading="lazy">
+        <img id="mwL" src="img/mirror-land.webp" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0" loading="lazy">
+      </div>
+      <svg id="mCursor" width="26" height="31" viewBox="0 0 34 40" style="position:absolute;left:0;top:0" aria-hidden="true"><path d="M3 2 L3 32 L11 25 L17 38 L23 35 L17 23 L28 23 Z" fill="#111110" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg>
+    </div></div></div><div class="base"></div></div>
+    <div class="phone" id="mPhone" style="left:975px;top:150px;width:200px"><div class="in"><img src="img/phone.webp" alt="" loading="lazy"></div></div>
+  </div></div></div>
+</div></section>
+
+<section class="scene" id="notify" data-scene="notify" data-dur="5200" data-steps="3"><div class="stage">
+  <div class="cap"><h2 class="rise">Notifications, on your PC.</h2><p>Messages, reminders and alerts from your phone appear above the taskbar, even with Dropline in the tray. Close one and it’s gone from your phone too.</p><ul><li>Pick the sound, the corner and how long they stay</li><li>Switch off any app, or hide message text</li></ul></div>
+  <div class="box"><div class="art"><div class="tilt">
+    <div class="laptop" style="left:10px;top:20px;width:900px"><div class="scr"><div><div class="desk" id="nDesk">
+      <div class="win" style="left:6%;top:8%;width:52%;height:60%"></div><div class="taskbar"></div>
+      <div class="note" data-i="0"><i style="background:#2fc35b"></i><span>Messages · Pixel 8</span><strong>Sam Rivera</strong><em>On my way, 5 minutes!</em></div>
+      <div class="note" data-i="1"><i style="background:#25d366"></i><span>WhatsApp · Pixel 8</span><strong>Family</strong><em>Mum: Dinner is at 7</em></div>
+      <div class="note" data-i="2"><i style="background:#4285f4"></i><span>Calendar · Pixel 8</span><strong>Design review in 15 minutes</strong><em>Room 3 · with Maya and Leo</em></div>
+    </div></div></div><div class="base"></div></div>
+    <div class="phone" id="nPhone" style="left:975px;top:150px;width:200px"><div class="in"><img src="img/phone.webp" alt="" loading="lazy"></div></div>
+    <svg width="1200" height="720" style="position:absolute;inset:0;overflow:visible;pointer-events:none" aria-hidden="true"><g id="waves" fill="none" stroke="#ff4f00" stroke-width="4" stroke-linecap="round"></g></svg>
+    <svg id="bell" width="70" height="70" viewBox="0 0 24 24" style="position:absolute;left:1040px;top:70px" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6v4l-2 3h16l-2-3V9a6 6 0 0 0-6-6z" fill="currentColor"/><path d="M9.5 19a2.5 2.5 0 0 0 5 0" fill="currentColor"/></svg>
+    <div class="badge" id="nBadge" style="left:1088px;top:62px">0</div>
+  </div></div></div>
+</div></section>
+
+<section class="scene" id="find" data-scene="find" data-dur="4200" data-steps="2"><div class="stage">
+  <div class="cap"><h2 class="rise">Lost your phone? Ring it.</h2><p>Click the bell and your phone rings at full volume, even on silent, until you find it. Its battery shows on your PC, with a heads‑up at 20%.</p></div>
+  <div class="box"><div class="art"><div class="tilt">
+    <img src="img/device-row.webp" alt="The phone's row on the PC: connected, 82% battery, with the ring button" style="position:absolute;left:10px;top:300px;width:500px;border-radius:16px;box-shadow:0 20px 44px -18px rgba(0,0,0,.4)" loading="lazy">
+    <svg id="fCursor" width="34" height="40" viewBox="0 0 34 40" style="position:absolute;left:410px;top:362px" aria-hidden="true"><path d="M3 2 L3 32 L11 25 L17 38 L23 35 L17 23 L28 23 Z" fill="#111110" stroke="#fff" stroke-width="2.5" stroke-linejoin="round"/></svg>
+    <div id="rings"></div>
+    <svg width="1200" height="720" style="position:absolute;inset:0;overflow:visible;pointer-events:none" aria-hidden="true"><g id="buzz" stroke="#ff4f00" stroke-width="5" stroke-linecap="round"></g></svg>
+    <div class="phone" id="fPhone" style="left:790px;top:70px;width:260px"><div class="in"><img src="img/phone.webp" alt="" loading="lazy"><div class="toast" id="hereToast" style="bottom:auto;top:42%;font-size:16px;padding:12px 20px">Here I am</div></div></div>
+  </div></div></div>
+</div></section>
+
+<section class="scene" id="private" data-scene="private" data-dur="5200" data-steps="3"><div class="stage">
+  <div class="cap"><h2 class="rise">Private by design.</h2><p>Dropline talks straight from one device to the other. No accounts, no servers, nothing in a cloud.</p><ul><li>Every connection encrypted and pinned to your own devices</li><li>Everything saved is encrypted too</li><li>Optional PIN lock, history that deletes itself, a security log</li></ul></div>
+  <div class="box"><div class="art"><div class="tilt">
+    <div class="cipher" id="cipher" style="left:40px;top:60px"></div>
+    <svg id="lock" width="300" height="360" viewBox="0 0 300 360" style="position:absolute;left:90px;top:170px;color:var(--ink);overflow:visible" aria-hidden="true">
+      <circle id="halo" cx="150" cy="240" r="150" fill="#ff4f00" opacity="0"/>
+      <path id="shackle" d="M85 170 V110 a65 65 0 0 1 130 0 V170" fill="none" stroke="currentColor" stroke-width="26" stroke-linecap="round"/>
+      <rect x="40" y="160" width="220" height="180" rx="34" fill="currentColor"/>
+      <circle cx="150" cy="240" r="18" fill="#ff4f00"/><rect x="141" y="245" width="18" height="40" rx="9" fill="#ff4f00"/>
+    </svg>
+    <div class="pin" id="pin" style="position:absolute;left:90px;top:580px;width:300px"><i></i><i></i><i></i><i></i></div>
+    <img id="set" src="img/settings.webp" alt="Dropline's Privacy and security settings" style="position:absolute;left:560px;top:30px;width:580px;border-radius:18px;box-shadow:0 40px 80px -30px rgba(0,0,0,.35);border:1px solid var(--line)" loading="lazy">
+  </div></div></div>
+</div></section>
+
+<section class="cta-band" id="get" data-stop><div class="wrap">
+  <svg class="link-anim" width="110" height="56" viewBox="0 0 120 60" aria-hidden="true" style="margin:0 auto 24px;display:block"><line x1="22" y1="30" x2="98" y2="30" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><circle cx="22" cy="30" r="17" fill="currentColor"/><circle cx="98" cy="30" r="17" fill="#ff4f00"/></svg>
+  <h2 class="rise">Get Dropline</h2>
+  <p class="lead">Install it on both devices, scan the code once, and they find each other on your Wi‑Fi from then on.</p>
+  <div class="row">
+    <a class="btn shine" href="https://github.com/ZiggiggYT/dropline-releases/releases/latest/download/Dropline-Setup.exe">Windows · Installer</a>
+    <a class="btn ghost" href="https://github.com/ZiggiggYT/dropline-releases/releases/latest/download/Dropline-android.apk">Android · APK</a>
+  </div>
+  <p class="tag" style="margin-top:18px">Free · No account · Windows 10/11 and Android 10+</p>
+</div></section>
+
+<footer><div class="wrap"><span>Dropline</span><span>Screens shown are the real app with sample content.</span></div></footer>
+
+<div id="hud" role="navigation" aria-label="Steps"><div id="dots"></div><button id="next" type="button"><span id="nextLabel">Next</span><kbd>Space</kbd></button></div>
+
+<script>
+{
+document.documentElement.classList.add('js');
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const seg=(p,a,b)=>clamp((p-a)/(b-a));
+const ease=t=>1-Math.pow(1-t,3);
+const easeIO=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const back=t=>{const c=1.7;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)};
+const lerp=(a,b,t)=>a+(b-a)*t;
+const quad=(p0,c,p1,t)=>[(1-t)**2*p0[0]+2*(1-t)*t*c[0]+t*t*p1[0],(1-t)**2*p0[1]+2*(1-t)*t*c[1]+t*t*p1[1]];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=id=>document.getElementById(id);
+const NAV=60;
+
+// Headlines rise word by word.
+for(const el of document.querySelectorAll('.rise')){el.innerHTML=el.textContent.split(' ').map((w,i)=>`<span class="w" style="--i:${i}">${w}</span>`).join(' ')}
+document.querySelectorAll('.cap li').forEach((li,i,all)=>li.style.setProperty('--i',[...li.parentElement.children].indexOf(li)));
+const io=new IntersectionObserver(es=>{for(const e of es)if(e.isIntersecting){e.target.classList.add('in')}},{threshold:.35});
+document.querySelectorAll('.rise,.cap').forEach(el=>io.observe(el));
+
+// Scenes are as tall as their steps.
+const scenes=[...document.querySelectorAll('.scene')];
+const setHeights=()=>{for(const s of scenes)s.style.height=(innerHeight-NAV)+'px'};
+
+// Each 1200×720 drawing scales to fit its box.
+const fit=()=>{for(const b of document.querySelectorAll('.box')){const a=b.firstElementChild;const s=Math.min(b.clientWidth/1200,b.clientHeight/720);a.style.transform=`scale(${s})`;a.style.left=(b.clientWidth-1200*s)/2+'px';a.style.top=(b.clientHeight-720*s)/2+'px'}};
+
+// Background: drifting light, a dot grid at another speed, and a quiet network of dots.
+const bg=$('bg');
+const cv=$('net'),cx=cv.getContext('2d');let pts=[];
+const sizeNet=()=>{cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';let s=7;const r=()=>(s=s*16807%2147483647)/2147483647;pts=Array.from({length:innerWidth<700?18:38},()=>({x:r()*innerWidth,y:r()*innerHeight,vx:(r()-.5)*.25,vy:(r()-.5)*.25}))};
+let pointer={x:.5,y:.5};
+addEventListener('pointermove',e=>{pointer={x:e.clientX/innerWidth,y:e.clientY/innerHeight}},{passive:true});
+
+// Scene animations; p runs 0→1 through each scene.
+const sc={};
+sc.hero=p=>{
+  const t=ease(p),now=performance.now();
+  $('heroPhone').style.transform=`translate(${t*50}px,${-t*40}px) rotate(${t*-5}deg)`;
+  $('heroLap').style.transform=`translate(${-t*30}px,${t*10}px)`;
+  const path=$('heroArc'),L=path.getTotalLength();
+  $('heroDots').innerHTML=[0,1,2].map(i=>{const pt=path.getPointAtLength((((now/2600)+i/3)%1)*L);return `<circle cx="${pt.x}" cy="${pt.y}" r="${9-i*2}" fill="#ff4f00" opacity="${1-i*.25}"/>`}).join('');
+};
+sc.copy=p=>{
+  const press=seg(p,.02,.14),up=seg(p,.14,.2);
+  for(const [id,d] of [['kCtrl',0],['kC',.04]]){const k=$(id),q=seg(p,.02+d,.1+d)-seg(p,.14,.2);k.style.transform=`translateY(${q*6}px) scale(${lerp(.6,1,ease(seg(p,0,.06)))})`;k.style.boxShadow=`0 ${6-q*6}px 0 #d7d2ca,0 14px 24px -10px rgba(0,0,0,.35)`;k.style.opacity=1-seg(p,.22,.3)}
+  const t=easeIO(seg(p,.18,.68)),P0=[400,190],C=[780,-70],P1=[1010,290];
+  const [x,y]=quad(P0,C,P1,t);
+  const c=$('copyChip');
+  c.style.transform=`translate(${x-160}px,${y-28}px) scale(${lerp(1,.6,seg(p,.6,.72))*(1+.06*Math.sin(t*Math.PI))}) rotate(${Math.sin(t*Math.PI)*-8}deg)`;
+  c.style.opacity=(1-seg(p,.7,.76))*(0.4+.6*ease(seg(p,0,.08)));
+  $('trail').innerHTML=t>0&&t<1?Array.from({length:14},(_,i)=>{const tt=clamp(t-i*.018);const [a,b]=quad(P0,C,P1,tt);return `<circle cx="${a}" cy="${b}" r="${8-i*.5}" fill="#ff4f00" opacity="${(1-i/14)*.7}"/>`}).join(''):'';
+  const bp=seg(p,.7,.86);
+  $('burst').innerHTML=bp>0&&bp<1?Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2,d=30+ease(bp)*90;return `<circle cx="${1040+Math.cos(a)*d}" cy="${280+Math.sin(a)*d}" r="${(i%2?5:7)*(1-bp)}" fill="${i%3?'#ff4f00':'currentColor'}" opacity="${1-bp}"/>`}).join(''):'';
+  $('cPhone').style.transform=`scale(${1+.04*Math.sin(seg(p,.7,.82)*Math.PI)})`;
+  const tt=$('copyToast');tt.style.opacity=seg(p,.78,.86);tt.style.transform=`translate(-50%,${(1-back(seg(p,.78,.9)))*24}px)`;
+};
+sc.send=p=>{
+  const lands=[[640,210],[680,270],[720,330]];
+  let st='';
+  [0,1,2].forEach(i=>{
+    const a=.05+i*.24,b=a+.34,raw=seg(p,a,b),t=easeIO(raw);
+    const [x,y]=quad([60,250+i*40],[400,-40+i*50],lands[i],t);
+    const c=$('c'+i);
+    c.style.transform=`translate(${x}px,${y}px) rotate(${lerp(-14+i*14,0,t)+Math.sin(raw*Math.PI)*10}deg) scale(${lerp(.85,.62,t)*(1+.12*Math.sin(raw*Math.PI))})`;
+    c.style.setProperty('--f',raw.toFixed(3));
+    c.style.opacity=(raw>0?1:.0)*(1-seg(p,b+.02,b+.1));
+    const s=seg(p,b,b+.1);
+    if(s>0&&s<1||p>b)st+=`<div class="stamp" style="left:${lands[i][0]+130}px;top:${lands[i][1]-10}px;transform:scale(${back(s)}) rotate(${(1-s)*-30}deg);opacity:${1-seg(p,b+.18,b+.26)}"><svg width="26" height="26" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
+  });
+  $('stamps').innerHTML=st;
+  $('sPhone').style.transform=`rotate(${Math.sin(p*40)*(p>.05&&p<.82?1.2:0)}deg)`;
+  $('sLap').style.transform=`translateY(${-Math.sin(seg(p,.35,.95)*Math.PI*3)*3}px)`;
+};
+sc.mirror=p=>{
+  const desk=$('mDesk'),W=desk.clientWidth,H=desk.clientHeight;
+  const slide=ease(seg(p,.03,.22)),drag=easeIO(seg(p,.26,.46)),back2=easeIO(seg(p,.46,.56)),turn=easeIO(seg(p,.6,.78)),full=easeIO(seg(p,.84,.97));
+  let w=lerp(W*.16,W*.36,turn),h=lerp(W*.16*2.17,W*.36*.5625,turn);
+  let x=W-w-16+(1-slide)*(w+60),y=H-h-40;
+  const dx=-W*.42*(drag-back2),dy=-H*.18*Math.sin((drag-back2)*Math.PI);
+  x+=dx;y+=dy;
+  x=lerp(x,0,full);y=lerp(y,0,full);w=lerp(w,W,full);h=lerp(h,H,full);
+  const mw=$('mw');mw.style.width=w+'px';mw.style.height=h+'px';mw.style.transform=`translate(${x}px,${y}px)`;mw.style.borderRadius=lerp(10,0,full)+'px';
+  $('mwL').style.opacity=turn;$('mwP').style.opacity=1-turn;
+  const cur=$('mCursor'),hold=seg(p,.22,.26)-seg(p,.56,.6);
+  cur.style.transform=`translate(${x+w*.5}px,${y+18}px) scale(${1-hold*.12})`;cur.style.opacity=seg(p,.16,.22)*(1-seg(p,.58,.62))+seg(p,.8,.84)*(1-seg(p,.9,.94));
+  $('mPhone').style.transform=`rotate(${-90*turn}deg) scale(${1-.06*Math.sin(turn*Math.PI)})`;
+};
+sc.notify=p=>{
+  let shown=0;
+  document.querySelectorAll('#nDesk .note').forEach(n=>{
+    const i=+n.dataset.i,a=.08+i*.18,t=seg(p,a,a+.14),out=i===2?easeIO(seg(p,.82,.94)):0;
+    if(t>0)shown++;
+    const stack=[...document.querySelectorAll('#nDesk .note')].filter(m=>+m.dataset.i>i&&seg(p,.08+ +m.dataset.i*.18,.22+ +m.dataset.i*.18)>0).length;
+    n.style.bottom=(46+stack*92)+'px';
+    n.style.opacity=ease(t)*(1-out);n.style.transform=`translateX(${(1-back(t))*360+out*380}px)`;
+    n.style.transition='bottom .45s cubic-bezier(.2,1.3,.3,1)';
+  });
+  if(p>.9)shown=2;
+  const b=$('nBadge');if(b.textContent!==String(shown)){b.textContent=shown;b.animate([{transform:'scale(1.5)'},{transform:'scale(1)'}],{duration:450,easing:'cubic-bezier(.2,1.6,.3,1)'})}
+  b.style.opacity=shown?1:0;
+  const ring=p>.06&&p<.7;
+  $('bell').style.transform=`rotate(${ring?Math.sin(p*90)*14:0}deg)`;$('bell').style.transformOrigin='50% 10%';
+  $('nPhone').style.transform=`rotate(${ring?Math.sin(p*70)*2:0}deg)`;
+  $('waves').innerHTML=ring?[0,1,2].map(i=>{const k=((p*6)+i/3)%1,r=40+k*70;return `<path d="M${1075-r} ${330-r*.7} A ${r} ${r} 0 0 0 ${1075-r} ${330+r*.7}" opacity="${1-k}"/><path d="M${1075+r} ${330-r*.7} A ${r} ${r} 0 0 1 ${1075+r} ${330+r*.7}" opacity="${1-k}"/>`}).join(''):'';
+};
+sc.find=p=>{
+  const come=ease(seg(p,0,.12)),press=seg(p,.12,.2);
+  $('fCursor').style.transform=`translate(${(1-come)*140}px,${(1-come)*90}px) scale(${1-.18*Math.sin(press*Math.PI)})`;
+  const live=p>.16&&p<.8;
+  $('rings').innerHTML=live?[0,1,2,3].map(i=>{const k=((p*5)+i/4)%1,s=180+k*320;return `<div class="ring" style="left:${920-s/2}px;top:${350-s/2}px;width:${s}px;height:${s}px;opacity:${(1-k)*.7}"></div>`}).join(''):'';
+  $('buzz').innerHTML=live?[[-1,0],[1,0]].map(([d])=>[0,1,2].map(i=>`<line x1="${920+d*(165+i*16)}" y1="${290+i*30}" x2="${920+d*(185+i*16)}" y2="${284+i*30}" opacity="${.5+.5*Math.sin(p*80+i)}"/>`).join('')).join(''):'';
+  $('fPhone').style.transform=live?`translateX(${Math.sin(p*260)*6}px) rotate(${Math.sin(p*190)*3}deg)`:'none';
+  const h=$('hereToast');h.style.opacity=seg(p,.22,.3)*(1-seg(p,.8,.86));h.style.transform=`translate(-50%,0) scale(${back(seg(p,.22,.34))})`;
+};
+const PLAIN='Table for 4 at Nori, 8pm',HEX='0123456789abcdef';
+sc.private=p=>{
+  const sc2=seg(p,.06,.42);
+  $('cipher').innerHTML=[...PLAIN].map((ch,i)=>{const th=(i/PLAIN.length)*.8;if(ch===' ')return ' ';if(sc2>th+.2)return `<span class="x">${HEX[(i*7+Math.floor(p*40))%16]}</span>`;if(sc2>th)return `<span>${HEX[(i*5+Math.floor(performance.now()/60))%16]}</span>`;return ch}).join('');
+  $('cipher').style.transform=`translateY(${(1-ease(seg(p,0,.1)))*30}px)`;
+  const lock=ease(seg(p,.46,.62));
+  $('shackle').style.transform=`translateY(${-50*(1-lock)}px)`;
+  $('halo').setAttribute('opacity',(Math.sin(seg(p,.58,.8)*Math.PI)*.35).toFixed(3));
+  $('halo').setAttribute('r',150+seg(p,.58,.8)*60);
+  $('lock').style.transform=`rotate(${Math.sin(seg(p,.6,.68)*Math.PI*3)*4}deg)`;
+  document.querySelectorAll('#pin i').forEach((d,i)=>d.classList.toggle('on',p>.66+i*.07));
+  const t=ease(seg(p,.04,.4));$('set').style.transform=`translateY(${(1-t)*80}px) rotate(${(1-t)*3}deg)`;$('set').style.opacity=lerp(.15,1,t);
+};
+
+// Steps: the hero, each step of each scene, and the download band.
+const stops=()=>[0,...scenes.map(sc=>sc.offsetTop-NAV),$('get').offsetTop-NAV-20].map(Math.round);
+let STOPS=[];
+const dots=$('dots');
+const buildDots=()=>{STOPS=stops();dots.innerHTML=STOPS.map((_,i)=>`<button type="button" aria-label="Step ${i+1}"></button>`).join('');[...dots.children].forEach((b,i)=>b.onclick=()=>go(i))};
+let anim=null;
+const go=i=>{
+  i=clamp(i,0,STOPS.length-1);const to=STOPS[i],from=scrollY;
+  if(reduce){scrollTo(0,to);return}
+  const dur=Math.min(1300,500+Math.abs(to-from)*.35),t0=performance.now();
+  cancelAnimationFrame(anim);
+  const stepF=now=>{const t=clamp((now-t0)/dur);scrollTo(0,from+(to-from)*easeIO(t));if(t<1)anim=requestAnimationFrame(stepF)};
+  anim=requestAnimationFrame(stepF);
+};
+const current=()=>{let k=0;STOPS.forEach((s,i)=>{if(scrollY>=s-innerHeight*.4)k=i});return k};
+addEventListener('wheel',()=>cancelAnimationFrame(anim),{passive:true});
+addEventListener('touchstart',()=>cancelAnimationFrame(anim),{passive:true});
+addEventListener('keydown',e=>{
+  if(e.target.closest('input,textarea,select'))return;
+  const fwd=(e.code==='Space'&&!e.shiftKey)||['ArrowDown','ArrowRight','PageDown'].includes(e.key);
+  const bwd=(e.code==='Space'&&e.shiftKey)||['ArrowUp','ArrowLeft','PageUp'].includes(e.key);
+  if(!fwd&&!bwd)return;
+  e.preventDefault();
+  const k=current();
+  go(fwd?k+1:k-1);
+});
+$('next').onclick=()=>{const k=current();go(k>=STOPS.length-1?0:k+1)};
+$('tour').onclick=()=>go(1);
+
+// Each scene plays its timeline by itself once it's in view, and again on return.
+const clock=new Map(scenes.map(s=>[s,{start:null}]));
+const playIO=new IntersectionObserver(es=>{for(const e of es){const c=clock.get(e.target);if(e.intersectionRatio>=.6&&c.start===null)c.start=performance.now();if(e.intersectionRatio<.15)c.start=null}},{threshold:[0,.15,.6,1]});
+scenes.forEach(s=>playIO.observe(s));
+const progressOf=(s,now)=>{if(reduce)return 1;const c=clock.get(s);return c.start===null?0:clamp((now-c.start)/(+s.dataset.dur))};
+
+// One frame of everything.
+let t0=performance.now();
+const frame=now=>{
+  const vh=innerHeight,y=scrollY,max=document.documentElement.scrollHeight-vh;
+  $('progress').style.transform=`scaleX(${max>0?y/max:0})`;
+  const hr=$('top').getBoundingClientRect();
+  sc.hero(reduce?0:clamp(-hr.top/Math.max(hr.height,1)));
+  for(const s of scenes){
+    const r=s.getBoundingClientRect();
+    if(r.bottom>0&&r.top<vh)sc[s.dataset.scene](progressOf(s,now));
+  }
+  $('grid').style.transform=`translate(${(pointer.x-.5)*-20}px,${-(y*.15)%28}px)`;
+  // Devices lean toward the pointer.
+  if(!reduce&&innerWidth>860)for(const t of document.querySelectorAll('.tilt'))t.style.transform=`rotateY(${(pointer.x-.5)*8}deg) rotateX(${(.5-pointer.y)*5}deg)`;
+  // A quiet network of dots behind everything.
+  if(!reduce){
+    const d=devicePixelRatio;cx.setTransform(d,0,0,d,0,0);cx.clearRect(0,0,innerWidth,innerHeight);
+    const col='17,17,16';
+    for(const q of pts){q.x+=q.vx;q.y+=q.vy;if(q.x<0||q.x>innerWidth)q.vx*=-1;if(q.y<0||q.y>innerHeight)q.vy*=-1}
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],dd=Math.hypot(a.x-b.x,a.y-b.y);if(dd<160){cx.strokeStyle=`rgba(${col},${(1-dd/160)*.09})`;cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke()}}
+    for(const q of pts){cx.fillStyle=`rgba(${col},.16)`;cx.beginPath();cx.arc(q.x,q.y,1.8,0,7);cx.fill()}
+  }
+  // Step dots.
+  const k=current();[...dots.children].forEach((b,i)=>{b.classList.toggle('on',i===k);if(i===k){const sc0=scenes[k-1];b.style.setProperty('--prog',sc0?progressOf(sc0,now).toFixed(3):1)}});
+  $('nextLabel').textContent=k>=STOPS.length-1?'Back to start':'Next';
+  if(!reduce)requestAnimationFrame(frame);
+};
+
+const layout=()=>{setHeights();fit();sizeNet();buildDots()};
+const ro=new ResizeObserver(()=>{fit()});ro.observe(document.body);
+addEventListener('resize',layout);
+layout();
+if(reduce){addEventListener('scroll',()=>frame(performance.now()),{passive:true});frame(performance.now())}else requestAnimationFrame(frame);
+
+// The logo draws itself once.
+if(!reduce){
+  const l=$('hl'),d1=$('hd1'),d2=$('hd2');
+  l.style.strokeDasharray='1';l.style.strokeDashoffset='1';d1.style.transform=d2.style.transform='scale(0)';
+  for(const e of [d1,d2]){e.style.transformOrigin=`${e.getAttribute('cx')}px 30px`;e.style.transition='transform .5s cubic-bezier(.2,1.4,.3,1)'}
+  l.style.transition='stroke-dashoffset .6s cubic-bezier(.6,0,.2,1) .25s';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{d1.style.transform='scale(1)';l.style.strokeDashoffset='0';setTimeout(()=>d2.style.transform='scale(1)',750)}));
+}
+}
+</script>
+</body>
+</html>

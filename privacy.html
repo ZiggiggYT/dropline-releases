@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy · Dropline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:light-dark(#ffffff,#121110);--ink:light-dark(#111110,#f3f1ec);--ink2:light-dark(#5f5c57,#aaa59d);--line:light-dark(#e7e3dc,#2d2b28);--fill:light-dark(#f5f3ef,#1c1b19);--accent:#ff4f00}
+:root,:root[data-theme]{color-scheme:light}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration-color:color-mix(in srgb,var(--accent) 60%,transparent);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+nav{border-bottom:1px solid var(--line)}
+nav .in,main,footer .in{max-width:780px;margin:0 auto;padding:0 max(5vw,18px)}
+nav .in{display:flex;align-items:center;gap:20px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;text-decoration:none;margin-right:auto}
+nav a:not(.brand){font-size:15px;color:var(--ink2);text-decoration:none}
+nav a:not(.brand):hover{color:var(--ink)}
+main{padding-top:56px;padding-bottom:80px}
+h1{font-size:clamp(38px,6vw,56px);line-height:1.02;letter-spacing:-.035em;margin:0 0 10px;font-weight:650}
+h2{font-size:28px;letter-spacing:-.02em;line-height:1.15;margin:52px 0 12px;font-weight:620}
+h3{font-size:20px;letter-spacing:-.01em;margin:34px 0 8px;font-weight:600}
+h4{font-size:16px;margin:22px 0 6px;font-weight:600}
+.lede{font-size:20px;color:var(--ink2);margin:0 0 40px}
+p,li{color:color-mix(in srgb,var(--ink) 82%,var(--bg))}
+ul,ol{padding-left:22px}
+li{margin:5px 0}
+li::marker{color:var(--accent)}
+code{font:500 14px "Geist Mono",monospace;background:var(--fill);padding:2px 6px;border-radius:6px}
+blockquote{margin:18px 0;padding:12px 16px;border-left:3px solid var(--accent);background:var(--fill);border-radius:0 10px 10px 0}
+.scroll{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600}
+.release{border-top:1px solid var(--line);padding:26px 0 6px}
+.release header{display:flex;align-items:baseline;gap:14px}
+.release h3{margin:0;font-size:24px}
+.release time{color:var(--ink2);font-size:15px}
+.release h4{display:flex;align-items:center;gap:8px}
+.release h4::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--ink2);font-size:14px}
+footer .in{display:flex;flex-wrap:wrap;gap:8px 24px}
+footer a{text-decoration:none}
+@media(max-width:560px){nav a.hide{display:none}}
+</style>
+</head>
+<body>
+<nav><div class="in">
+  <a class="brand" href="index.html"><svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><line x1="6" y1="10" x2="28" y2="10" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="6" cy="10" r="5.2" fill="currentColor"/><circle cx="28" cy="10" r="5.2" fill="#ff4f00"/></svg>Dropline</a>
+  <a class="hide" href="index.html#features">Features</a>
+  <a href="changelog.html">Changelog</a>
+  <a href="index.html#download">Download</a>
+</div></nav>
+<main>
+<h1>Privacy policy</h1><p class="lede">What Dropline does with your data, how it’s protected, and what it never does.</p><p>Dropline moves clipboard text, links, files, screens and notifications between your own devices. This page describes how that data is protected, and what HIPAA would require beyond the app.</p>
+<h2 id="what-dropline-does-with-your-data">What Dropline does with your data</h2>
+<div class="scroll"><table><thead><tr><th>Data</th><th>Where it goes</th><th>Where it's stored</th></tr></thead><tbody><tr><td>Clipboard text, links, typed text</td><td>Straight to your paired device</td><td>Activity history (optional, see below), encrypted</td></tr><tr><td>Photos, videos, files</td><td>Straight to your paired device</td><td>Your Downloads / Pictures / Movies folder, as normal files</td></tr><tr><td>Screen sharing</td><td>Straight to the viewing device</td><td>Never saved</td></tr><tr><td>Phone notifications</td><td>Straight to your computer</td><td>In memory only; gone when the app closes</td></tr><tr><td>App icons of apps that notified you</td><td>Computer</td><td>Plain image files (not sensitive)</td></tr><tr><td>Pairing keys, settings, security log</td><td>Never leave the device</td><td>Encrypted</td></tr></tbody></table></div>
+<p>There are <strong>no servers, accounts, analytics, ads or crash reporting</strong>. Nothing is sent to us or to anyone else.</p>
+<h2 id="safeguards">Safeguards</h2>
+<p><strong>In transit</strong></p>
+<ul><li>Every connection uses TLS. Each device makes its own certificate, and the other side accepts <em>only</em> that certificate (pinning), so another device on the Wi‑Fi can't listen in or pretend to be yours.</li><li>Pairing needs either the QR code from the other screen (valid for 15 minutes, single use) or the same 6-digit code confirmed on both screens.</li><li>After pairing, every request must carry a 256-bit shared secret. Anything else is refused and logged.</li><li>Connections ignore system proxies and always go directly between the two devices.</li></ul>
+<p><strong>At rest</strong></p>
+<ul><li>Everything Dropline saves is encrypted with AES‑256‑GCM, including history, pairings, settings, its own private key and the security log.</li><li>The encryption key is protected by the operating system:</li><li><strong>Windows:</strong> DPAPI, so only your Windows account can unlock it.</li><li><strong>Android:</strong> the Keystore, hardware-backed on most phones.</li><li>Android cloud backup and device-to-device transfer are turned off for Dropline, so its data is never copied to Google Drive or a new phone.</li><li>Temporary files from interrupted transfers are deleted the next time the app starts.</li></ul>
+<p><strong>Access</strong></p>
+<ul><li><strong>App lock:</strong> a 4–8 digit PIN, stored only as a salted PBKDF2‑SHA256 hash (120,000 rounds).</li><li>It locks after a set time away. On Android it also hides Dropline from screenshots and the recent-apps preview.</li><li>After 5 wrong tries, waits grow from 30 seconds up to 16 minutes.</li><li><strong>While locked:</strong> notification popups on the PC show only the app name, never the message.</li><li><strong>Lock screen:</strong> Dropline's own Android notifications show no content.</li></ul>
+<p><strong>Minimum necessary</strong></p>
+<ul><li><strong>Activity history:</strong> kept for 30 days by default. You can choose Off, 1, 7 or 30 days, or Always.</li><li><strong>Clipboard text:</strong> not saved in history by default.</li><li><strong>Password managers:</strong> passwords they copy are <strong>never synced</strong>. Dropline respects Windows' "don't monitor this clipboard" marker.</li><li><strong>"Hide message text":</strong> shows only the app name in PC popups.</li><li><strong>Notification apps:</strong> you choose which apps' notifications reach the PC.</li><li><strong>"Visible to nearby devices":</strong> can be turned off so unpaired devices don't see this device's name.</li></ul>
+<p><strong>Audit</strong></p>
+<ul><li><strong>Security log:</strong> records pairing, declined pairing, unpairing, rejected connections, screen sharing, lock changes and repeated wrong PINs. It's encrypted, keeps the last 300 events, and is under Settings → Privacy &amp; security.</li><li><strong>Erase all data:</strong> unpairs every device and deletes history, notifications, icons and the log.</li></ul>
+<p><strong>Robustness</strong></p>
+<ul><li>Requests from the network are size-limited, and pairing prompts are rate-limited (one per 5 seconds per address).</li></ul>
+<h2 id="hipaa">HIPAA</h2>
+<p><strong>An app on its own can't be "HIPAA compliant".</strong> HIPAA applies to <em>covered entities</em> (healthcare providers, health plans, clearinghouses) and their <em>business associates</em>. Compliance is about the whole organisation, not just the software. If you're a covered entity using Dropline with protected health information (PHI), you would still need to:</p>
+<ol><li><strong>Do a risk analysis</strong> that includes these devices and this app (§164.308(a)(1)).</li><li><strong>Write policies.</strong> Cover who may use Dropline with PHI, on which devices, and on which networks (trusted Wi‑Fi only, never public Wi‑Fi).</li><li><strong>Secure the devices themselves.</strong> Turn on full-disk encryption: BitLocker on Windows (Android encrypts by default). Use screen locks, keep the devices up to date, and run anti-malware. Dropline encrypts its <em>own</em> data. Files you receive are normal files in your Downloads folder, so they're protected only by the device's disk encryption.</li><li><strong>Turn on Dropline's app lock,</strong> and use "Hide message text" if notifications may contain PHI.</li><li><strong>Set a short history retention</strong> (Off or 1 day) if PHI could pass through the clipboard.</li><li><strong>Train staff, manage access and plan for incidents,</strong> which are administrative safeguards.</li><li><strong>Business Associate Agreements:</strong> none are needed for Dropline itself, because no third party ever receives or stores the data. Re-check this if you add any cloud service later.</li></ol>
+<p>Dropline gives you the <strong>technical safeguards</strong> that the Security Rule expects: access control, audit controls, integrity, authentication and transmission security. It has not been independently audited or certified. If HIPAA applies to you, have your compliance officer review it as part of your risk analysis.</p>
+<h2 id="reporting-a-problem">Reporting a problem</h2>
+<p>If you find a security issue, open a private issue on the repository rather than a public one.</p>
+</main>
+<footer><div class="in"><span>Dropline 1.8.0</span><a href="privacy.html">Privacy</a><a href="changelog.html">Changelog</a><a href="https://github.com/ZiggiggYT/dropline-releases/releases">All releases</a></div></footer>
+</body>
+</html>

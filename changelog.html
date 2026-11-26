@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog · Dropline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:light-dark(#ffffff,#121110);--ink:light-dark(#111110,#f3f1ec);--ink2:light-dark(#5f5c57,#aaa59d);--line:light-dark(#e7e3dc,#2d2b28);--fill:light-dark(#f5f3ef,#1c1b19);--accent:#ff4f00}
+:root,:root[data-theme]{color-scheme:light}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Geist,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration-color:color-mix(in srgb,var(--accent) 60%,transparent);text-underline-offset:3px}
+a:hover{text-decoration-color:var(--accent)}
+nav{border-bottom:1px solid var(--line)}
+nav .in,main,footer .in{max-width:780px;margin:0 auto;padding:0 max(5vw,18px)}
+nav .in{display:flex;align-items:center;gap:20px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;text-decoration:none;margin-right:auto}
+nav a:not(.brand){font-size:15px;color:var(--ink2);text-decoration:none}
+nav a:not(.brand):hover{color:var(--ink)}
+main{padding-top:56px;padding-bottom:80px}
+h1{font-size:clamp(38px,6vw,56px);line-height:1.02;letter-spacing:-.035em;margin:0 0 10px;font-weight:650}
+h2{font-size:28px;letter-spacing:-.02em;line-height:1.15;margin:52px 0 12px;font-weight:620}
+h3{font-size:20px;letter-spacing:-.01em;margin:34px 0 8px;font-weight:600}
+h4{font-size:16px;margin:22px 0 6px;font-weight:600}
+.lede{font-size:20px;color:var(--ink2);margin:0 0 40px}
+p,li{color:color-mix(in srgb,var(--ink) 82%,var(--bg))}
+ul,ol{padding-left:22px}
+li{margin:5px 0}
+li::marker{color:var(--accent)}
+code{font:500 14px "Geist Mono",monospace;background:var(--fill);padding:2px 6px;border-radius:6px}
+blockquote{margin:18px 0;padding:12px 16px;border-left:3px solid var(--accent);background:var(--fill);border-radius:0 10px 10px 0}
+.scroll{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600}
+.release{border-top:1px solid var(--line);padding:26px 0 6px}
+.release header{display:flex;align-items:baseline;gap:14px}
+.release h3{margin:0;font-size:24px}
+.release time{color:var(--ink2);font-size:15px}
+.release h4{display:flex;align-items:center;gap:8px}
+.release h4::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--ink2);font-size:14px}
+footer .in{display:flex;flex-wrap:wrap;gap:8px 24px}
+footer a{text-decoration:none}
+@media(max-width:560px){nav a.hide{display:none}}
+</style>
+</head>
+<body>
+<nav><div class="in">
+  <a class="brand" href="index.html"><svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true"><line x1="6" y1="10" x2="28" y2="10" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><circle cx="6" cy="10" r="5.2" fill="currentColor"/><circle cx="28" cy="10" r="5.2" fill="#ff4f00"/></svg>Dropline</a>
+  <a class="hide" href="index.html#features">Features</a>
+  <a href="changelog.html">Changelog</a>
+  <a href="index.html#download">Download</a>
+</div></nav>
+<main>
+<h1>Changelog</h1><p class="lede">Every version of Dropline and what changed.</p><article class="release" id="v1.8.0"><header><h3>1.8.0</h3><time>26 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>Pair phones with each other. On a phone, Pair now has "Scan a code" and "Show my code": show the code on one phone and scan it with the other. Other phones also show up under Nearby, like computers do.</li><li>Everything works between two phones: photos, videos, files, links, clipboard, sharing your screen, find my phone, and the fly-across animation (out the top of one phone, in from the top of the other).</li></ul></article>
+<article class="release" id="v1.7.0"><header><h3>1.7.0</h3><time>23 Nov 2026</time></header><h4 id="changed">Changed</h4>
+<ul><li>Windows: new desktop cards. The card that rises over your screen and the phone notifications in the corner now look like the rest of Dropline: rounded corners, a soft shadow, a small Dropline header on the flying card, and a check that lands as it arrives. Notifications show a close button when you hover over them, and battery alerts are tinted orange.</li><li>An orange glow lights up along the bottom edge of the screen as things pass through it.</li></ul>
+<h4 id="fixed">Fixed</h4>
+<ul><li>Windows: Dropline could crash after a card appeared over the desktop. The cards no longer use a second copy of the Flutter engine (the cause); Dropline draws them itself and Windows just shows them.</li><li>Windows: phone notifications on the PC weren't appearing (same cause).</li></ul></article>
+<article class="release" id="v1.6.8"><header><h3>1.6.8</h3><time>23 Nov 2026</time></header><h4 id="fixed">Fixed</h4>
+<ul><li>Windows: 1.6.7 crashed on start. The change that saved the engine's error messages to a file is removed.</li></ul></article>
+<article class="release" id="v1.6.7"><header><h3>1.6.7</h3><time>23 Nov 2026</time></header><h4 id="fixed">Fixed</h4>
+<ul><li>Windows: another fix for the popup window (notifications and the card over the desktop) never starting. It now starts the same way Dropline itself does, rather than through a separate entry point that some release builds don't keep.</li></ul></article>
+<article class="release" id="v1.6.6"><header><h3>1.6.6</h3><time>23 Nov 2026</time></header><h4 id="fixed">Fixed</h4>
+<ul><li>Windows: the notification popups and the card over the desktop never appeared. Since a Flutter update, the popup's code starts before its window is listening, so its "ready" signal was lost and the window waited forever. It now repeats it until it's heard.</li></ul></article>
+<article class="release" id="v1.6.5"><header><h3>1.6.5</h3><time>23 Nov 2026</time></header><h4 id="fixed">Fixed</h4>
+<ul><li>Windows: the card over the desktop never appeared, because its separate drawing engine didn't start on some PCs. It now runs inside the same small window as the notification popups, which already works everywhere, so arrivals rise up over whatever you're doing as intended.</li></ul></article>
+<article class="release" id="v1.6.4"><header><h3>1.6.4</h3><time>23 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>Windows: Settings → Animations → "Test over other apps" sends a sample card over the desktop and shows, step by step, how far it got. Helps track down why the overlay isn't appearing on some PCs.</li></ul></article>
+<article class="release" id="v1.6.3"><header><h3>1.6.3</h3><time>23 Nov 2026</time></header><h4 id="fixed">Fixed</h4>
+<ul><li>On the PC, things arriving from the phone could show nowhere at all. Dropline now asks Windows at that moment whether its window is the one you're using: if it is, the card plays inside the window; if not, it rises over the desktop.</li><li>If the desktop card can't appear for any reason, Dropline falls back to the corner popup (and the in-app card when the window is open), so nothing arrives unseen.</li></ul></article>
+<article class="release" id="v1.6.2"><header><h3>1.6.2</h3><time>23 Nov 2026</time></header><h4 id="changed">Changed</h4>
+<ul><li>Sending and receiving are now in sync: the card shows up on the other device just as it leaves yours, so it looks like one card travelling between them.</li><li>Arrivals glide in more slowly (about a second instead of half), with a softer landing, and stay a little longer before settling away. Same on the phone, the PC, and both overlays.</li></ul>
+<h4 id="fixed">Fixed</h4>
+<ul><li>The PC overlay only appeared while Dropline was hidden in the tray. It now appears whenever Dropline isn't the window you're using, e.g. when another app is in front.</li><li>On Android the overlay never appeared because Android hadn't been asked for "Display over other apps". The home screen now asks, once.</li></ul></article>
+<article class="release" id="v1.6.1"><header><h3>1.6.1</h3><time>23 Nov 2026</time></header><h4 id="changed">Changed</h4>
+<ul><li>Things now travel the way you'd picture it, with the computer above the phone. Sending from the PC drops the card out the bottom of the window; on the phone it comes in from the top and lands in the middle. Sending from the phone shoots it out the top; on the PC it rises up from the bottom to the middle.</li><li>On Android, the card over other apps now lands in the middle of the screen and never blocks your taps.</li></ul>
+<h4 id="new">New</h4>
+<ul><li>A Windows overlay: while Dropline is hidden in the tray, arrivals rise up from the bottom of the screen over whatever you're doing, and things you send drop away out the bottom. Click a card to send it on its way sooner. Clipboard sync stays quiet here so every Ctrl+C doesn't fly across your screen.</li></ul></article>
+<article class="release" id="v1.6.0"><header><h3>1.6.0</h3><time>23 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>Watch things fly across. Send a photo, video, file, link, your clipboard or your screen and a card of it rises, then shoots out through the top of the window. On the other device it drops in through the top edge, lands with a little bounce, and shows what arrived.</li><li>On Android, arrivals can also drop in over other apps (Settings → Animations → Over other apps). Android asks you to allow "Display over other apps" once.</li><li>On a PC with Dropline hidden in the tray, arrivals pop up in the corner instead.</li><li>Settings → Animations, with a "Try it" button and a switch to turn it all off.</li></ul>
+<h4 id="privacy">Privacy</h4>
+<ul><li>While Dropline is locked, or "Hide message text" is on, the cards show only what kind of thing arrived, not what's in it.</li></ul></article>
+<article class="release" id="v1.5.3"><header><h3>1.5.3</h3><time>23 Nov 2026</time></header><h4 id="changed">Changed</h4>
+<ul><li>Activity and Notifications are grouped by day (Today, Yesterday, …).</li><li>Friendlier times: "Just now", "4 min ago", "Last seen 3 h ago".</li><li>Each item shows whether it came in (orange arrow) or went out (black arrow).</li><li>Apps without an icon get their own colour in the notification list.</li><li>Tidier send buttons on the phone.</li><li>The pairing screen shows it's searching with a live signal.</li><li>On a PC, the welcome screen has an animation of things travelling between your phone and computer.</li></ul></article>
+<article class="release" id="v1.5.2"><header><h3>1.5.2</h3><time>23 Nov 2026</time></header><h4 id="changed">Changed</h4>
+<ul><li>An Update button in Settings → Updates. One tap checks GitHub, downloads the newest version, checks its signature and installs it: on Windows Dropline restarts by itself, on Android the installer opens.</li><li>The Update button on the home screen does the whole thing in one tap too.</li><li>If Android asks you to allow installing updates, Dropline carries on by itself when you come back.</li></ul></article>
+<article class="release" id="v1.5.1"><header><h3>1.5.1</h3><time>23 Nov 2026</time></header><h4 id="fixed">Fixed</h4>
+<ul><li>Devices weren't found again after switching Wi‑Fi networks, so you had to pair again. Dropline now notices the network change, starts listening on the new network and looks for your paired devices by itself.</li><li>If broadcasts are blocked on a network, Dropline checks the local network directly for your paired devices. A device only counts if it proves it's the one you paired with.</li></ul></article>
+<article class="release" id="v1.5.0"><header><h3>1.5.0</h3><time>22 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>A proper Windows installer: Dropline-Setup.exe opens Dropline's own setup screen.</li><li>Setup lets you choose where to install, a desktop shortcut, the Start menu and starting with Windows. No administrator password needed.</li><li>Dropline now appears in Windows "Installed apps" and can be uninstalled from there.</li><li>Dropline's own uninstaller, with a choice to also delete your data.</li><li>Uninstall and "Uninstall and delete my data" buttons in Settings, on the PC and the phone.</li></ul>
+<h4 id="security">Security</h4>
+<ul><li>The uninstaller only removes files inside a verified Dropline folder.</li><li>It refuses drive roots, Windows, Program Files, your user folders, any folder not named Dropline, folders without Dropline's marker, and anything containing links.</li><li>It deletes files one by one and only removes empty folders. It never deletes recursively.</li></ul></article>
+<article class="release" id="v1.4.0"><header><h3>1.4.0</h3><time>22 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>Updates: Dropline checks for new versions by itself and shows "Update available" with what's new.</li><li>One-tap updating. On Windows it downloads, restarts and you're done. On Android it opens the install screen.</li><li>Every update is digitally signed. Dropline refuses anything that isn't signed by its own build.</li><li>Changelog in Settings, and a "What's new" note the first time you open a new version.</li></ul>
+<h4 id="fixed">Fixed</h4>
+<ul><li>The screen-share player could end up partly off-screen after rotating the phone.</li></ul></article>
+<article class="release" id="v1.3.0"><header><h3>1.3.0</h3><time>22 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>Lots more motion: buttons lift on hover, toggles stretch, and the send arrow shoots up.</li><li>The drop zone's border marches while you drag files over it.</li><li>Progress bars shimmer, and new items slide in from the side they came from with a soft glow.</li><li>The tab underline and counters animate. The QR code gets a scan line and pairing ends in a burst.</li><li>Screen sharing ripples while live, and phone tiles hop when tapped.</li></ul></article>
+<article class="release" id="v1.2.0"><header><h3>1.2.0</h3><time>22 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>App lock with a PIN, auto-lock after time away, and hidden from screenshots on Android.</li><li>Privacy &amp; security settings: history retention, hiding from nearby devices, a security log and Erase all data.</li><li>Welcome screens for new installs.</li><li>A check mark when a transfer finishes, smoother screen transitions and haptic taps on Android.</li></ul>
+<h4 id="security">Security</h4>
+<ul><li>Everything saved is encrypted (AES-256), with the key locked by Windows or the Android Keystore.</li><li>Android cloud backup is turned off for Dropline's data.</li><li>Passwords copied from password managers are never synced.</li><li>History is deleted after 30 days by default, and clipboard text isn't saved unless you turn it on.</li><li>Limits on request sizes and pairing prompts from devices on the network.</li><li>Dropline's notifications on the Android lock screen no longer show their content.</li></ul></article>
+<article class="release" id="v1.1.0"><header><h3>1.1.0</h3><time>21 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>Phone notifications on your PC, with sound, position, duration, per-app switches and dismiss-on-both.</li><li>Battery level and a low-battery alert.</li><li>Find my phone: ring it at full volume, even on silent. The phone can ring the PC too.</li><li>Screen sharing both ways: your phone in a corner of your PC, or your PC on your phone.</li></ul></article>
+<article class="release" id="v1.0.0"><header><h3>1.0.0</h3><time>21 Nov 2026</time></header><h4 id="new">New</h4>
+<ul><li>Shared clipboard between your PC and phone.</li><li>Send links (they open in the browser), text, photos, videos and files.</li><li>Pair with a QR code or a 6-digit code, with encrypted connections pinned to your devices.</li><li>Windows tray app, Android share menu and a Quick Settings tile.</li></ul></article>
+</main>
+<footer><div class="in"><span>Dropline 1.8.0</span><a href="privacy.html">Privacy</a><a href="changelog.html">Changelog</a><a href="https://github.com/ZiggiggYT/dropline-releases/releases">All releases</a></div></footer>
+</body>
+</html>
